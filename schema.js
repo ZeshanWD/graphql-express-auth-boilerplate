@@ -9,9 +9,11 @@ export default `
 
   type Query {
     allUsers: [User!]!
+    getCurrentUser: User
   }
 
   type Mutation {
-    createUser(email: String!, username: String!): User!
+    register(username: String!, email: String!, password: String!): User!
+    login(email: String!, password: String!): String!
   }
 `;
