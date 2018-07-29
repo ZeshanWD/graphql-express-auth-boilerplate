@@ -20,7 +20,7 @@ const schema = makeExecutableSchema({
 const app = express();
 
 // Middleware para autenticar el token
-const addUser = async req => {
+const authenticate = async req => {
   const token = req.headers.authorization;
   try {
     // el metodo verify nos devuelve el payload.
@@ -32,7 +32,7 @@ const addUser = async req => {
   req.next();
 };
 
-app.use(addUser);
+app.use(authenticate);
 
 app.use(cors());
 

@@ -26,11 +26,14 @@ export default {
   },
   Mutation: {
     register: async (parent, args, context) => {
-      const user = args;
+      if (!args.email) throw new Error('SIGNUP__EMAIL_IS_REQUIRED');
+
+      const user = await User.find({ email: args.email });
+      if (user) throw new Error('SIGNUP__EMAIL_ALREADY_EXISTS');
 
       // vamos a hashear la contraseña, para guardarla en la base de datos.
-      user.password = await bcrypt.hash(user.password, 12);
-      return User.create(user);
+      args.password = await bcrypt.hash(args.password, 12);
+      return User.create(args);
     },
     login: async (parent, { email, password }, { SECRET }) => {
       const user = await User.findOne({ email });
@@ -51,7 +54,7 @@ export default {
         },
         SECRET,
         {
-          expiresIn: '1y'
+          expiresIn: '4h'
         }
       );
 
